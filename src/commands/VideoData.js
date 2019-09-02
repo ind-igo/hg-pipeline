@@ -5,7 +5,7 @@ const transcriptor = require('../lib/FetchTranscript')
 class VideoData extends Command {
   async run() {
     const {flags} = this.parse(VideoData)
-    const videoId = flags.name
+    const videoId = flags.video
     let data = await fetcher(videoId)
     data["transcript"] = await transcriptor(videoId)
 
