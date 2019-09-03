@@ -7,7 +7,7 @@ class VideoData extends Command {
     const {flags} = this.parse(VideoData)
     const videoId = flags.video
     let data = await fetcher(videoId)
-    data["transcript"] = await transcriptor(videoId)
+    data.transcript = await transcriptor(videoId)
 
     if (flags.export) {
     }
