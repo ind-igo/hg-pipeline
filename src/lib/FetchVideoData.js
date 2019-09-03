@@ -1,5 +1,4 @@
 require('dotenv').config();
-const getSubtitles = require('youtube-captions-scraper').getSubtitles;
 const { google } = require('googleapis');
 const { YT_API_KEY: auth } = process.env;
 const youtube = google.youtube({ version: 'v3', auth });

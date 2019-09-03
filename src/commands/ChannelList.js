@@ -4,10 +4,13 @@ const ChannelUtils = require("../lib/ChannelUtils")
 class ChannelList extends Command {
   async run() {
     const {flags} = this.parse(ChannelList)
-    const channelId = flags.name
+    const channelId = flags.channel
+    console.log(channelId)
     const playlistId = await ChannelUtils.GetPlaylistId(channelId)
-    VideoIdList = await ChannelUtils.GetChannelVideoIds(playlistId)
+    console.log(playlistId)
+    const videoIdList = await ChannelUtils.GetChannelVideoIds(playlistId)
 
+    console.log(videoIdList)
     this.log(data)
   }
 }
@@ -15,7 +18,7 @@ class ChannelList extends Command {
 ChannelList.description = `Pulls all video IDs from channel`
 
 ChannelList.flags = {
-  video: flags.string({char: 'c', description: 'Channel ID'})
+  channel: flags.string({char: 'c', description: 'Channel ID'})
 }
 
 module.exports = ChannelList
