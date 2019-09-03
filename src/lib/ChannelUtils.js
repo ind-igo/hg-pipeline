@@ -23,25 +23,25 @@ async function GetChannelVideoIds(playlistId_) {
 		const { items, nextPageToken } = await fetchPlaylistItemPage(
 			playlistId_,
 			currentPageToken
-		);
-		playlistItems.push(...items);
-		// nextPageToken
-		// 	? (currentPageToken = nextPageToken)
-    //   : (currentPageToken = '');
+    );
+    //playlistItems.push(...items);
+    for(element of items) {
+      playlistItems.push(element.contentDetails.videoId);
+    }
     currentPageToken = nextPageToken ? nextPageToken : '';
 	} while (currentPageToken);
 
 	return playlistItems;
 };
 
-const fetchPlaylistItemPage = (playlistId, pageToken = '', maxResults = 50) => {
-	const { data } = youtube.playlistItems.list({
+async function fetchPlaylistItemPage(playlistId, pageToken = '', maxResults = 50) {
+	const { data } = await youtube.playlistItems.list({
 		part: 'contentDetails',
 		maxResults,
 		pageToken,
 		playlistId,
 		fields: 'nextPageToken,prevPageToken,pageInfo,items(contentDetails/videoId)'
-	});
+  });
 	const { items, nextPageToken } = data;
 	return { items, nextPageToken };
 };

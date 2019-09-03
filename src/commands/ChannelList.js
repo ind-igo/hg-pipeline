@@ -5,13 +5,10 @@ class ChannelList extends Command {
   async run() {
     const {flags} = this.parse(ChannelList)
     const channelId = flags.channel
-    console.log(channelId)
     const playlistId = await ChannelUtils.GetPlaylistId(channelId)
-    console.log(playlistId)
     const videoIdList = await ChannelUtils.GetChannelVideoIds(playlistId)
 
     console.log(videoIdList)
-    this.log(data)
   }
 }
 

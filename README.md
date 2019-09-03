@@ -1,7 +1,7 @@
 hg-pipeline
 ===========
 
-Hieroglyph Youtube data pipeline
+Hieroglyph Youtube Data Pipeline
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/hg-pipeline.svg)](https://npmjs.org/package/hg-pipeline)
