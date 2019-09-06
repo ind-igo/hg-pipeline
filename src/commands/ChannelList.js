@@ -15,7 +15,8 @@ class ChannelList extends Command {
 ChannelList.description = `Pulls all video IDs from channel`
 
 ChannelList.flags = {
-  channel: flags.string({char: 'c', description: 'Channel ID'})
+  channel: flags.string({char: 'c', description: 'Channel ID'}),
+
 }
 
 module.exports = ChannelList
