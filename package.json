@@ -8,9 +8,10 @@
   },
   "bugs": "https://github.com/sali0/hg-pipeline/issues",
   "dependencies": {
-    "@oclif/command": "^1.5.18",
+    "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
     "@oclif/plugin-help": "^2.2.1",
+    "appbase-js": "^4.0.2-beta.7",
     "dotenv": "^8.1.0",
     "googleapis": "^42.0.0",
     "youtube-captions-scraper": "^1.0.3"
@@ -18,12 +19,13 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
+    "axios": "^0.19.0",
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-config-oclif": "^3.1.0",
     "globby": "^10.0.1",
     "mocha": "^5.2.0",
-    "nyc": "^13.3.0"
+    "nyc": "^14.1.1"
   },
   "engines": {
     "node": ">=8.0.0"

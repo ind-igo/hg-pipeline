@@ -24,6 +24,7 @@ class VideoData extends Command {
       for (const item of videoIdArray) {
         let videoData = await Fetcher(item)
         videoData.transcript = await Transcriptor(item)
+        console.log(`${videoData.title} has been transcribed!`)
         completeChannelData.push(videoData)
       }
 

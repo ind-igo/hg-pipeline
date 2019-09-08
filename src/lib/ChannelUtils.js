@@ -1,6 +1,6 @@
-require('dotenv').config();
-const { google } = require('googleapis');
-const { YT_API_KEY: auth } = process.env;
+require('dotenv').config()
+const { google } = require('googleapis')
+const { YT_API_KEY: auth } = process.env
 
 const youtube = google.youtube({ version: 'v3', auth })
 
@@ -10,29 +10,29 @@ async function GetPlaylistId(channelId) {
 		part: 'contentDetails',
 		id: channelId,
 		fields: 'items(contentDetails/relatedPlaylists/uploads)'
-	});
-	return data.items[0].contentDetails.relatedPlaylists.uploads;
+	})
+	return data.items[0].contentDetails.relatedPlaylists.uploads
 }
 
 // Returns list of video IDs in playlist
 async function GetChannelVideoIds(playlistId_) {
-	let currentPageToken = '';
-	let playlistItems = [];
+	let currentPageToken = ''
+	let playlistItems = []
 
 	do {
 		const { items, nextPageToken } = await fetchPlaylistItemPage(
 			playlistId_,
 			currentPageToken
     );
-    //playlistItems.push(...items);
-    for(element of items) {
-      playlistItems.push(element.contentDetails.videoId);
-    }
-    currentPageToken = nextPageToken ? nextPageToken : '';
-	} while (currentPageToken);
 
-	return playlistItems;
-};
+    for(element of items) {
+      playlistItems.push(element.contentDetails.videoId)
+    }
+    currentPageToken = nextPageToken ? nextPageToken : ''
+	} while (currentPageToken)
+
+	return playlistItems
+}
 
 async function fetchPlaylistItemPage(playlistId, pageToken = '', maxResults = 50) {
 	const { data } = await youtube.playlistItems.list({
@@ -41,9 +41,9 @@ async function fetchPlaylistItemPage(playlistId, pageToken = '', maxResults = 50
 		pageToken,
 		playlistId,
 		fields: 'nextPageToken,prevPageToken,pageInfo,items(contentDetails/videoId)'
-  });
-	const { items, nextPageToken } = data;
-	return { items, nextPageToken };
+  })
+	const { items, nextPageToken } = data
+	return { items, nextPageToken }
 };
 
 module.exports = { GetPlaylistId, GetChannelVideoIds }

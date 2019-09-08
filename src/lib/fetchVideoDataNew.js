@@ -1,54 +1,28 @@
 require('dotenv').config();
+const { YT_API_KEY } = process.env;
 const { google } = require('googleapis');
-const { YT_API_KEY: auth } = process.env;
-const youtube = google.youtube({ version: 'v3', auth });
+const youtube = google.youtube({ version: 'v3', auth: YT_API_KEY });
 
-// returns promise. Error handling occurs in middleware that calls this fetch function
-async function fetchVideoData (videoId){
+exports.fetchVideoData = async (videoId) => {
 	const { data } = await youtube.videos.list({
 		part: 'snippet,contentDetails',
 		id: videoId,
 		fields: 'items(snippet,contentDetails(caption,duration))'
-  });
+	});
 
-  return { videoId: videoId, ...filterItemResponse(data.items) };
+	return filter(data.items[0]);
 };
 
-// helper function for formatting response
-function filterItemResponse(items) {
-	// destructure objects from first element of items array
-  const { snippet, contentDetails } = items[0];
-	const {
-		publishedAt,
-    channelId,
-		title,
-		description,
-		thumbnails,
-		channelTitle,
-		tags,
-		categoryId,
-		defaultLanguage
-  } = snippet;
-  const { duration, caption } = contentDetails
-  const captionsAdded = caption;
-  const category = decodeCategory(categoryId)
-
+function filter(videoItem) {
+	delete videoItem.snippet.localized;
 	return {
-		publishedAt,
-    channelId,
-		title,
-		description,
-		thumbnails,
-		channelTitle,
-		tags,
-		category,
-    defaultLanguage,
-    duration,
-    captionsAdded
+		...videoItem.snippet,
+		...videoItem.contentDetails,
+		category: decode(+videoItem.snippet.categoryId)
 	};
 }
 
-function decodeCategory(categoryId) {
+function decode(categoryId) {
 	switch (categoryId) {
 		case 1:
 			return 'Film & Animation';
@@ -118,5 +92,3 @@ function decodeCategory(categoryId) {
 			return 'Undefined';
 	}
 }
-
-module.exports = fetchVideoData
