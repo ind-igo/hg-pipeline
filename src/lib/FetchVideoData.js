@@ -3,6 +3,41 @@ const { google } = require('googleapis');
 const { YT_API_KEY: auth } = process.env;
 const youtube = google.youtube({ version: 'v3', auth });
 
+const categories = {
+		'1': 'Film & Animation',
+		'2': 'Autos & Vehicles',
+		'10': 'Music',
+		'15': 'Pets & Animals',
+		'17': 'Sports',
+		'18': 'Short Movies',
+		'19': 'Travel & Events',
+		'20': 'Gaming',
+		'21': 'Videoblogging',
+		'22':'People & Blogs',
+		'23': 'Comedy',
+		'24': 'Entertainment',
+		'25': 'News & Politics',
+		'26': 'Howto & Style',
+		'27': `Education`,
+		'28': "Science & Technology",
+		'29': 'Nonprofits & Activism',
+		'30': 'Movies',
+		'31': 'Anime/Animation',
+		'32': 'Action/Adventure',
+		'33': 'Classics',
+		'34': 'Comedy',
+		'35': 'Documentary',
+		'36': 'Drama',
+		'37': 'Family',
+		'38': 'Foreign',
+		'39': 'Horror',
+		'40': 'Sci-Fi/Fantasy',
+		'41': 'Thriller',
+		'42': 'Shorts',
+		'43': 'Shows',
+		'44': 'Trailers',
+  }
+
 // returns promise. Error handling occurs in middleware that calls this fetch function
 async function fetchVideoData (videoId){
 	const { data } = await youtube.videos.list({
@@ -30,8 +65,8 @@ function filterItemResponse(items) {
 		defaultLanguage
   } = snippet;
   const { duration, caption } = contentDetails
-  const captionsAdded = caption;
-  const category = decodeCategory(categoryId)
+  const userCaptions = caption
+  const category = categories[categoryId]
 
 	return {
 		publishedAt,
@@ -44,79 +79,8 @@ function filterItemResponse(items) {
 		category,
     defaultLanguage,
     duration,
-    captionsAdded
+    userCaptions
 	};
-}
-
-function decodeCategory(categoryId) {
-	switch (categoryId) {
-		case 1:
-			return 'Film & Animation';
-		case 2:
-			return 'Autos & Vehicles';
-		case 10:
-			return 'Music';
-		case 15:
-			return 'Pets & Animals';
-		case 17:
-			return 'Sports';
-		case 18:
-			return 'Short Movies';
-		case 19:
-			return 'Travel & Events';
-		case 20:
-			return 'Gaming';
-		case 21:
-			return 'Videoblogging';
-		case 22:
-			return 'People & Blogs';
-		case 23:
-			return 'Comedy';
-		case 24:
-			return 'Entertainment';
-		case 25:
-			return 'News & Politics';
-		case 26:
-			return 'Howto & Style';
-		case 27:
-			return 'Education';
-		case 28:
-			return 'Science & Technology';
-		case 29:
-			return 'Nonprofits & Activism';
-		case 30:
-			return 'Movies';
-		case 31:
-			return 'Anime/Animation';
-		case 32:
-			return 'Action/Adventure';
-		case 33:
-			return 'Classics';
-		case 34:
-			return 'Comedy';
-		case 35:
-			return 'Documentary';
-		case 36:
-			return 'Drama';
-		case 37:
-			return 'Family';
-		case 38:
-			return 'Foreign';
-		case 39:
-			return 'Horror';
-		case 40:
-			return 'Sci-Fi/Fantasy';
-		case 41:
-			return 'Thriller';
-		case 42:
-			return 'Shorts';
-		case 43:
-			return 'Shows';
-		case 44:
-			return 'Trailers';
-		default:
-			return 'Undefined';
-	}
 }
 
 module.exports = fetchVideoData
