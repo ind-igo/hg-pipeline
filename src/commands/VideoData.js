@@ -8,6 +8,7 @@ class VideoData extends Command {
   async run() {
     const {flags} = this.parse(VideoData)
 
+    // For -v option
     if (flags.video) {
       const videoId = flags.video
       let data = await Fetcher(videoId)
@@ -15,11 +16,13 @@ class VideoData extends Command {
       this.log(data);
     } 
 
+    // For -c option
     if (flags.channel) {
       const channelId = flags.channel
       const playlistId = await ChannelUtils.GetPlaylistId(channelId)
       const videoIdArray = await ChannelUtils.GetChannelVideoIds(playlistId)
 
+      // Assemble all video data from channel in one object
       let completeChannelData = []
       for (const item of videoIdArray) {
         let videoData = await Fetcher(item)
@@ -28,6 +31,7 @@ class VideoData extends Command {
         completeChannelData.push(videoData)
       }
 
+      // if -e is available, export json to file
       if (flags.export) {
         const filename = flags.export
         const channelData = JSON.stringify(completeChannelData, null, 2)
