@@ -20,7 +20,7 @@ async function GetChannelVideoIds(playlistId_) {
 	let playlistItems = []
 
 	do {
-		const { items, nextPageToken } = await fetchPlaylistItemPage(
+		const { items, nextPageToken } = await FetchPlaylistItemPage(
 			playlistId_,
 			currentPageToken
     );
@@ -34,7 +34,7 @@ async function GetChannelVideoIds(playlistId_) {
 	return playlistItems
 }
 
-async function fetchPlaylistItemPage(playlistId, pageToken = '', maxResults = 50) {
+async function FetchPlaylistItemPage(playlistId, pageToken = '', maxResults = 50) {
 	const { data } = await youtube.playlistItems.list({
 		part: 'contentDetails',
 		maxResults,

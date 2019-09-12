@@ -1,6 +1,6 @@
 const fs = require('fs')
 const {Command, flags} = require('@oclif/command')
-const Fetcher = require('../lib/FetchVideoData')
+const DataFetcher = require('../lib/FetchVideoData')
 const Transcriptor = require('../lib/FetchTranscript')
 const ChannelUtils = require("../lib/ChannelUtils")
 
@@ -8,10 +8,11 @@ class VideoData extends Command {
   async run() {
     const {flags} = this.parse(VideoData)
 
+    // TODO: Change to get captionTrack and transcript, and call both functions here
     // For -v option
     if (flags.video) {
       const videoId = flags.video
-      let data = await Fetcher(videoId)
+      let data = await DataFetcher(videoId)
       data.transcript = await Transcriptor(videoId)
       this.log(data);
     } 
@@ -22,13 +23,20 @@ class VideoData extends Command {
       const playlistId = await ChannelUtils.GetPlaylistId(channelId)
       const videoIdArray = await ChannelUtils.GetChannelVideoIds(playlistId)
 
+      // TODO: Discard useless transcripts
       // Assemble all video data from channel in one object
       let completeChannelData = []
       for (const item of videoIdArray) {
-        let videoData = await Fetcher(item)
-        videoData.transcript = await Transcriptor(item)
-        console.log(`${videoData.title} has been transcribed!`)
-        completeChannelData.push(videoData)
+        const transcript = await Transcriptor(item)
+        if (transcript === "") {
+          console.log("No transcript available, skipping...")
+          continue
+        } else {
+          let videoData = await DataFetcher(item)
+          videoData = { ...videoData, transcript }
+          console.log(`${videoData.title} has been transcribed!`)
+          completeChannelData.push(videoData)
+        }
       }
 
       // if -e is available, export json to file

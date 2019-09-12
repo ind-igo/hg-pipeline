@@ -39,7 +39,7 @@ const categoryMap = {
 }
 
 // returns promise. Error handling occurs in middleware that calls this fetch function
-async function fetchVideoData (videoId){
+async function FetchVideoData (videoId){
   const { data } = await youtube.videos.list({
     part: 'snippet,contentDetails',
     id: videoId,
@@ -83,4 +83,4 @@ function filterItemResponse(items) {
 	};
 }
 
-module.exports = fetchVideoData
+module.exports = FetchVideoData

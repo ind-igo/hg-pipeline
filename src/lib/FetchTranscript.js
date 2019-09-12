@@ -7,7 +7,7 @@ async function FetchTranscript(videoId) {
     let captions = await getSubtitles({ videoID: videoId, lang: 'en' });
     transcript = CreateTranscript(captions)
   } catch {
-    transcript = "Transcript Unavailable"
+    transcript = ""
   }
 
   return transcript
