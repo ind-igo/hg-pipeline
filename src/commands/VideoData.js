@@ -18,37 +18,40 @@ class VideoData extends Command {
     } 
 
     // For -c option
-    if (flags.channel) {
+    if (flags.channel && flags.export) {
       const channelId = flags.channel
+      const filename = flags.export
+
+      // Setup stream output file
+      const output = fs.createWriteStream(`${filename}.json`)
+      output.write('[\n')
+      let seperator = ''
+
+      // Get array of video IDs for channel
       const playlistId = await ChannelUtils.GetPlaylistId(channelId)
       const videoIdArray = await ChannelUtils.GetChannelVideoIds(playlistId)
 
-      // TODO: Discard useless transcripts
-      // Assemble all video data from channel in one object
-      let completeChannelData = []
-      for (const item of videoIdArray) {
-        const transcript = await Transcriptor(item)
-        if (transcript === "") {
+      //completeChannelData = []
+      // Assemble video data into object and write to output file stream
+      for (const element of videoIdArray) {
+        const transcript = await Transcriptor(element)
+
+        if (!transcript) {
           console.log("No transcript available, skipping...")
           continue
         } else {
-          let videoData = await DataFetcher(item)
+          let videoData = await DataFetcher(element)
           videoData = { ...videoData, transcript }
+
+          output.write(seperator + JSON.stringify(videoData, null, 2))
+          if(!seperator)
+            seperator = ",\n"
+
           console.log(`${videoData.title} has been transcribed!`)
-          completeChannelData.push(videoData)
         }
       }
+      output.write('\n]')
 
-      // if -e is available, export json to file
-      if (flags.export) {
-        const filename = flags.export
-        const channelData = JSON.stringify(completeChannelData, null, 2)
-
-        fs.writeFile(`${filename}.json`, channelData, (err) => {
-          if (err) throw err
-          console.log(`File has been saved to ${filename}.json`)
-        })
-      }
       //this.log(completeChannelData)
     }
   }
