@@ -18,8 +18,8 @@ const categoryMap = {
   '24': 'Entertainment',
   '25': 'News & Politics',
   '26': 'Howto & Style',
-  '27': `Education`,
-  '28': "Science & Technology",
+  '27': 'Education',
+  '28': 'Science & Technology',
   '29': 'Nonprofits & Activism',
   '30': 'Movies',
   '31': 'Anime/Animation',
@@ -38,15 +38,19 @@ const categoryMap = {
   '44': 'Trailers',
 }
 
-// returns promise. Error handling occurs in middleware that calls this fetch function
+// Grabs Youtube video data from Youtube Data API.
 async function FetchVideoData (videoId){
-  const { data } = await youtube.videos.list({
-    part: 'snippet,contentDetails',
-    id: videoId,
-    fields: 'items(snippet,contentDetails(caption,duration))'
+  try {
+    const { data } = await youtube.videos.list({
+      part: 'snippet,contentDetails',
+      id: videoId,
+      fields: 'items(snippet,contentDetails(caption,duration))'
   });
 
   return { videoId: videoId, ...filterItemResponse(data.items) };
+  } catch(error) {
+    return false
+  }
 };
 
 // helper function for formatting response

@@ -5,10 +5,10 @@ const { YT_API_KEY: auth } = process.env
 const youtube = google.youtube({ version: 'v3', auth })
 
 // Returns playlist ID of all channel uploads
-async function GetPlaylistId(channelId) {
+async function GetPlaylistId(channelId_) {
 	const { data } = await youtube.channels.list({
 		part: 'contentDetails',
-		id: channelId,
+		id: channelId_,
 		fields: 'items(contentDetails/relatedPlaylists/uploads)'
 	})
 	return data.items[0].contentDetails.relatedPlaylists.uploads
@@ -23,7 +23,7 @@ async function GetChannelVideoIds(playlistId_) {
 		const { items, nextPageToken } = await FetchPlaylistItemPage(
 			playlistId_,
 			currentPageToken
-    );
+    )
 
     for(element of items) {
       playlistItems.push(element.contentDetails.videoId)
