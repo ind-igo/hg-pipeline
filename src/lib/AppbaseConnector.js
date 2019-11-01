@@ -1,4 +1,5 @@
 require('dotenv').config()
+
 const Appbase = require("appbase-js")
 
 const {HOST_URL, APP_NAME, APPBASE_CREDENTIALS } = process.env

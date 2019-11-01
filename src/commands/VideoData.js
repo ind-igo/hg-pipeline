@@ -22,10 +22,6 @@ class VideoData extends Command {
       const channelId = flags.channel
       const filename = flags.export
 
-      // IDK IF THIS WORKS
-      let bracket = fs.exists(`${filename}.json`) ? '[\n' : ''
-      let seperator = fs.exists(`${filename}.json`) ? ',' : ''
-
       // Setup stream output file
       const output = fs.createWriteStream(`${filename}.json`)
       output.write('[\n')
@@ -70,16 +66,6 @@ class VideoData extends Command {
 
       //this.log(completeChannelData)
     }
-
-    // For -c and -i option, when you have a JSON file partially
-    //  finished and want to continue.
-    if(flags.channel && flags.append) {
-      const importedFile = flags.append
-      const channelId = flags.channel
-
-      // Need to read last object in file and use that to find where I
-      // stopped in the channel list
-    }
   }
 }
 
@@ -88,8 +74,7 @@ VideoData.description = `Gets Youtube video data for a single video or a whole c
 VideoData.flags = {
   video: flags.string({char: 'v', description: 'Video ID'}),
   channel: flags.string({char: 'c', description: 'Channel ID'}),
-  export: flags.string({char: 'e', description: 'Export to JSON. Enter desired file name.'}),
-  channel: flags.string({char: 'a', description: 'Append to JSON. Checks from last element and continues as far as possible.'})
+  export: flags.string({char: 'e', description: 'Export to JSON. Enter desired file name.'})
 }
 
 module.exports = VideoData
